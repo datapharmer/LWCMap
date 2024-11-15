@@ -1,4 +1,3 @@
-@AuraEnabled
 public with sharing class LtngMapController {
 
     //Holds all the fields for an error to be inserted in the @future method.
