@@ -2,6 +2,7 @@ public with sharing class LtngMapController {
 
     //Holds all the fields for an error to be inserted in the @future method.
     //Doesn't actually get directly inserted
+    @AuraEnabled
     public static ltngMap__Map_Error__c mapError = new ltngMap__Map_Error__c();
 
     /*
