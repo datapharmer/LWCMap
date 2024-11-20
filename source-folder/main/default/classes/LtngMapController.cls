@@ -2,7 +2,7 @@ public with sharing class LtngMapController {
 
     //Holds all the fields for an error to be inserted in the @future method.
     //Doesn't actually get directly inserted
-    public static ltngMap__Map_Error__c mapError = new ltngMap__Map_Error__c();
+    public static Map_Error__c mapError = new Map_Error__c();
 
     /*
         getPropertyAddress
@@ -45,17 +45,17 @@ public with sharing class LtngMapController {
                 List<MapMarker> locs = new List<MapMarker>{mark};
                 return locs;
             }catch(Exception e){
-                mapError.ltngMap__Exception_Type__c += e.getTypeName();
-                mapError.ltngMap__Exception_Message__c += e.getMessage();
+                mapError.Exception_Type__c += e.getTypeName();
+                mapError.Exception_Message__c += e.getMessage();
             }
         }
         insertError(
-            mapError.ltngMap__Record_ID__c,
-            mapError.ltngMap__Object_Name__c,
-            mapError.ltngMap__Mapping_Query__c,
-            mapError.ltngMap__Inaccessible_Fields__c,
-            mapError.ltngMap__Exception_Type__c,
-            mapError.ltngMap__Exception_Message__c,
+            mapError.Record_ID__c,
+            mapError.Object_Name__c,
+            mapError.Mapping_Query__c,
+            mapError.Inaccessible_Fields__c,
+            mapError.Exception_Type__c,
+            mapError.Exception_Message__c,
             userInfo.getUserId());
         return null;
     }
@@ -72,34 +72,34 @@ public with sharing class LtngMapController {
     @future
     public static void insertError(String id, String obj, String query, String fields, String type, String msg, id usr){
         boolean createdToday = false;
-        List<ltngMap__Map_Error__c> errors = [SELECT id, 
-            ltngMap__Record_ID__c, 
-            ltngMap__Mapping_Query__c, 
-            ltngMap__Inaccessible_Fields__c,
-            ltngMap__Exception_Type__c,
-            ltngMap__Exception_Message__c,
-            createdById FROM ltngMap__Map_Error__c WHERE CreatedDate = TODAY];
-        for(ltngMap__Map_Error__c error : errors){
-            if(error.ltngMap__Inaccessible_Fields__c == null){
-                error.ltngMap__Inaccessible_Fields__c = '';
+        List<Map_Error__c> errors = [SELECT id, 
+            Record_ID__c, 
+            Mapping_Query__c, 
+            Inaccessible_Fields__c,
+            Exception_Type__c,
+            Exception_Message__c,
+            createdById FROM Map_Error__c WHERE CreatedDate = TODAY];
+        for(Map_Error__c error : errors){
+            if(error.Inaccessible_Fields__c == null){
+                error.Inaccessible_Fields__c = '';
             }
-            if(error.ltngMap__Record_ID__c == id &&
-                error.ltngMap__Mapping_Query__c == query &&
-                error.ltngMap__Inaccessible_Fields__c == fields &&
-                error.ltngMap__Exception_Type__c == type &&
-                error.ltngMap__Exception_Message__c == msg &&
+            if(error.Record_ID__c == id &&
+                error.Mapping_Query__c == query &&
+                error.Inaccessible_Fields__c == fields &&
+                error.Exception_Type__c == type &&
+                error.Exception_Message__c == msg &&
                 error.createdById == usr){
                     createdToday = true;
                 }
         }
         if(!createdToday){
-            insert new ltngMap__Map_Error__c(
-                ltngMap__Record_ID__c = id,
-                ltngMap__Object_Name__c = obj,
-                ltngMap__Mapping_Query__c = query,
-                ltngMap__Inaccessible_Fields__c = fields,
-                ltngMap__Exception_Type__c = type,
-                ltngMap__Exception_Message__c = msg);
+            insert new Map_Error__c(
+                Record_ID__c = id,
+                Object_Name__c = obj,
+                Mapping_Query__c = query,
+                Inaccessible_Fields__c = fields,
+                Exception_Type__c = type,
+                Exception_Message__c = msg);
         }
     }
 
@@ -109,12 +109,12 @@ public with sharing class LtngMapController {
         to insert the record due to an error 
     */
     public static void setCoreErrorFields(String query, String objType, String id){
-        mapError.ltngMap__Record_ID__c = id;
-        mapError.ltngMap__Object_Name__c = objType;
-        mapError.ltngMap__Mapping_Query__c = query;
-        mapError.ltngMap__Inaccessible_Fields__c = '';
-        mapError.ltngMap__Exception_Type__c= '';
-        mapError.ltngMap__Exception_Message__c= '';
+        mapError.Record_ID__c = id;
+        mapError.Object_Name__c = objType;
+        mapError.Mapping_Query__c = query;
+        mapError.Inaccessible_Fields__c = '';
+        mapError.Exception_Type__c= '';
+        mapError.Exception_Message__c= '';
     }
 
     /*
@@ -138,15 +138,15 @@ public with sharing class LtngMapController {
             try{
                 if (!fieldMap.get(field).getDescribe().isAccessible()) {
                     access = false;
-                    mapError.ltngMap__Inaccessible_Fields__c += field + ', ';
+                    mapError.Inaccessible_Fields__c += field + ', ';
                 }
             }catch(Exception e){
-                mapError.ltngMap__Exception_Type__c += e.getTypeName() + ' | ';
-                mapError.ltngMap__Exception_Message__c += e.getMessage() + ' | ';   
+                mapError.Exception_Type__c += e.getTypeName() + ' | ';
+                mapError.Exception_Message__c += e.getMessage() + ' | ';   
             }
         }
         if(!access){
-            mapError.ltngMap__Exception_Type__c += new System.NoAccessException().getTypeName() + ', ';
+            mapError.Exception_Type__c += new System.NoAccessException().getTypeName() + ', ';
         }
         return access;
     }
