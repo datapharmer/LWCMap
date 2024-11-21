@@ -4,7 +4,7 @@
     <description>Lightning Component that shows an address on a map, given the correct address parameters within Lightning App Builder</description>
     <masterLabel>Record Map Inner</masterLabel>
     <isExposed>true</isExposed>
-    <!--<targets>
+    <targets>
       <target>lightning__RecordPage</target>
     </targets>
     <targetConfigs>
@@ -20,5 +20,5 @@
             <property name="margin" type="boolean" label="With Margin" default="true"/>
             <property name="marginTitle" type="String" label="Margin Title" default="Account Location"/>
         </targetConfig>
-  </targetConfigs>-->
+  </targetConfigs>
 </LightningComponentBundle>

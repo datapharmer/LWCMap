@@ -17,30 +17,30 @@ public with sharing class LtngMapController_Test {
         Contact cont = [SELECT firstname, lastName, mailingStreet, mailingCity ,mailingState ,mailingCountry,mailingPostalCode FROM Contact][0];
 
         test.startTest();
-            List<LtngMapController.MapMarker> mapMarkers1 = LtngMapController.getAddress(cont.id, 'abc', 'def', 'hij', 'klm', 'nop', 'qrs', 'tuv', '');   
+            List<LtngMapController.MapMarker> mapMarkers1 = LtngMapController.getAddress(cont.id, 'abc', 'def', 'hij', 'klm', 'nop', 'qrs', 'tuv');   
         test.stopTest();
 
-        ltngMap__Map_Error__c mapError = [SELECT id, ltngMap__Record_ID__c, 
-            ltngMap__Mapping_Query__c, 
-            ltngMap__Inaccessible_Fields__c,
-            ltngMap__Exception_Type__c,
-            ltngMap__Exception_Message__c FROM ltngMap__Map_Error__c][0];
+        Map_Error__c mapError = [SELECT id, Record_ID__c, 
+            Mapping_Query__c, 
+            Inaccessible_Fields__c,
+            Exception_Type__c,
+            Exception_Message__c FROM Map_Error__c][0];
 
-        system.assert(mapError.ltngMap__Mapping_Query__c.contains('abc'));
-        system.assert(mapError.ltngMap__Mapping_Query__c.contains('def'));
-        system.assert(mapError.ltngMap__Mapping_Query__c.contains('hij'));
-        system.assert(mapError.ltngMap__Exception_Type__c.contains('System.NullPointerException'));
-        system.assert(mapError.ltngMap__Exception_Type__c.contains('System.QueryException'));
-        system.assert(mapError.ltngMap__Exception_Message__c.contains('Attempt to de-reference a null object'));
-        system.assert(mapError.ltngMap__Exception_Message__c.contains('No such column'));
+        system.assert(mapError.Mapping_Query__c.contains('abc'));
+        system.assert(mapError.Mapping_Query__c.contains('def'));
+        system.assert(mapError.Mapping_Query__c.contains('hij'));
+        system.assert(mapError.Exception_Type__c.contains('System.NullPointerException'));
+        system.assert(mapError.Exception_Type__c.contains('System.QueryException'));
+        system.assert(mapError.Exception_Message__c.contains('Attempt to de-reference a null object'));
+        system.assert(mapError.Exception_Message__c.contains('No such column'));
 
         //Re-create the exact same error immediately after, it should not create a second identical error message
-        List<LtngMapController.MapMarker> mapMarkers2 = LtngMapController.getAddress(cont.id, 'abc', 'def', 'hij', 'klm', 'nop', 'qrs', 'tuv', 'wxy');         
-        List<ltngMap__Map_Error__c> mapErrors = [SELECT id, ltngMap__Record_ID__c, 
-            ltngMap__Mapping_Query__c, 
-            ltngMap__Inaccessible_Fields__c,
-            ltngMap__Exception_Type__c,
-            ltngMap__Exception_Message__c FROM ltngMap__Map_Error__c];
+        List<LtngMapController.MapMarker> mapMarkers2 = LtngMapController.getAddress(cont.id, 'abc', 'def', 'hij', 'klm', 'nop', 'qrs', 'tuv');         
+        List<Map_Error__c> mapErrors = [SELECT id, Record_ID__c, 
+            Mapping_Query__c, 
+            Inaccessible_Fields__c,
+            Exception_Type__c,
+            Exception_Message__c FROM Map_Error__c];
         system.assertEquals(mapErrors.size(),1);
     }
 
@@ -52,7 +52,7 @@ public with sharing class LtngMapController_Test {
     static void getAddress_Contact(){
         Contact cont = [SELECT firstname, lastName, mailingStreet, mailingCity ,mailingState ,mailingCountry,mailingPostalCode FROM Contact][0];
         test.startTest();
-            List<LtngMapController.MapMarker> mapMarkers = LtngMapController.getAddress(cont.id, 'mailingStreet', 'mailingCity', 'mailingState', 'mailingCountry', 'mailingPostalCode', 'FirstName', 'LastName', '');         
+            List<LtngMapController.MapMarker> mapMarkers = LtngMapController.getAddress(cont.id, 'mailingStreet', 'mailingCity', 'mailingState', 'mailingCountry', 'mailingPostalCode', 'FirstName', 'LastName');         
         test.stopTest();
 
         system.assertEquals(mapMarkers.size(),1);
@@ -79,7 +79,7 @@ public with sharing class LtngMapController_Test {
         Account acc = [SELECT name, description, billingStreet, billingCity, billingState, billingCountry,billingPostalCode FROM Account][0];
 
         test.startTest();
-            List<LtngMapController.MapMarker> mapMarkers = LtngMapController.getAddress(acc.id, 'billingStreet', 'billingCity', 'billingState', 'billingCountry', 'billingPostalCode', 'Name', 'description', '');
+            List<LtngMapController.MapMarker> mapMarkers = LtngMapController.getAddress(acc.id, 'billingStreet', 'billingCity', 'billingState', 'billingCountry', 'billingPostalCode', 'Name', 'description');
         test.stopTest();
 
         system.assertEquals(mapMarkers.size(),1);
